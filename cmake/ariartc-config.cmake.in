@@ -1,0 +1,54 @@
+# AriaRTC CMake config file
+#
+# This file sets the following variables:
+# AriaRTC_FOUND - Always TRUE.
+# AriaRTC_INCLUDE_DIRS - Directories containing the AriaRTC include files.
+# AriaRTC_IDL_DIRS - Directories containing the AriaRTC IDL files.
+# AriaRTC_LIBRARIES - Libraries needed to use AriaRTC.
+# AriaRTC_DEFINITIONS - Compiler flags for AriaRTC.
+# AriaRTC_VERSION - The version of AriaRTC found.
+# AriaRTC_VERSION_MAJOR - The major version of AriaRTC found.
+# AriaRTC_VERSION_MINOR - The minor version of AriaRTC found.
+# AriaRTC_VERSION_REVISION - The revision version of AriaRTC found.
+# AriaRTC_VERSION_CANDIDATE - The candidate version of AriaRTC found.
+
+message(STATUS "Found AriaRTC-@PROJECT_VERSION@")
+set(AriaRTC_FOUND TRUE)
+
+find_package(<dependency> REQUIRED)
+
+#set(AriaRTC_INCLUDE_DIRS
+#    "@CMAKE_INSTALL_PREFIX@/include/@PROJECT_NAME_LOWER@-@PROJECT_VERSION_MAJOR@"
+#    ${<dependency>_INCLUDE_DIRS}
+#    )
+#
+#set(AriaRTC_IDL_DIRS
+#    "@CMAKE_INSTALL_PREFIX@/include/@PROJECT_NAME_LOWER@-@PROJECT_VERSION_MAJOR@/idl")
+set(AriaRTC_INCLUDE_DIRS
+    "@CMAKE_INSTALL_PREFIX@/include/@CPACK_PACKAGE_FILE_NAME@"
+    ${<dependency>_INCLUDE_DIRS}
+    )
+set(AriaRTC_IDL_DIRS
+    "@CMAKE_INSTALL_PREFIX@/include/@CPACK_PACKAGE_FILE_NAME@/idl")
+
+
+if(WIN32)
+    set(AriaRTC_LIBRARIES
+        "@CMAKE_INSTALL_PREFIX@/@LIB_INSTALL_DIR@/@CMAKE_SHARED_LIBRARY_PREFIX@@PROJECT_NAME_LOWER@@CMAKE_STATIC_LIBRARY_SUFFIX@"
+        ${<dependency>_LIBRARIES}
+        )
+else(WIN32)
+    set(AriaRTC_LIBRARIES
+        "@CMAKE_INSTALL_PREFIX@/@LIB_INSTALL_DIR@/@CMAKE_SHARED_LIBRARY_PREFIX@@PROJECT_NAME_LOWER@@CMAKE_SHARED_LIBRARY_SUFFIX@"
+        ${<dependency>_LIBRARIES}
+        )
+endif(WIN32)
+
+set(AriaRTC_DEFINITIONS ${<dependency>_DEFINITIONS})
+
+set(AriaRTC_VERSION @PROJECT_VERSION@)
+set(AriaRTC_VERSION_MAJOR @PROJECT_VERSION_MAJOR@)
+set(AriaRTC_VERSION_MINOR @PROJECT_VERSION_MINOR@)
+set(AriaRTC_VERSION_REVISION @PROJECT_VERSION_REVISION@)
+set(AriaRTC_VERSION_CANDIDATE @PROJECT_VERSION_CANDIDATE@)
+

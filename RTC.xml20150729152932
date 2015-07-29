@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<rtc:RtcProfile rtc:version="0.2" rtc:id="RTC:SUGAR SWEET ROBOTICS:MobileRobot:AriaRTC:0.0.1" xmlns:rtcExt="http://www.openrtp.org/namespaces/rtc_ext" xmlns:rtcDoc="http://www.openrtp.org/namespaces/rtc_doc" xmlns:rtc="http://www.openrtp.org/namespaces/rtc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <rtc:BasicInfo xsi:type="rtcExt:basic_info_ext" rtcExt:saveProject="AriaRTC" rtc:updateDate="2015-07-29T15:23:13.928+09:00" rtc:creationDate="2015-07-29T14:57:42+09:00" rtc:version="0.0.1" rtc:vendor="SUGAR SWEET ROBOTICS" rtc:maxInstances="1" rtc:executionType="PeriodicExecutionContext" rtc:executionRate="1000.0" rtc:description="Mobile Robots ARIA library avialble robot RT-component" rtc:category="MobileRobot" rtc:componentKind="DataFlowComponent" rtc:activityType="PERIODIC" rtc:componentType="STATIC" rtc:name="AriaRTC"/>
+    <rtc:Actions>
+        <rtc:OnInitialize xsi:type="rtcDoc:action_status_doc" rtc:implemented="true"/>
+        <rtc:OnFinalize xsi:type="rtcDoc:action_status_doc" rtc:implemented="false"/>
+        <rtc:OnStartup xsi:type="rtcDoc:action_status_doc" rtc:implemented="false"/>
+        <rtc:OnShutdown xsi:type="rtcDoc:action_status_doc" rtc:implemented="false"/>
+        <rtc:OnActivated xsi:type="rtcDoc:action_status_doc" rtc:implemented="true"/>
+        <rtc:OnDeactivated xsi:type="rtcDoc:action_status_doc" rtc:implemented="true"/>
+        <rtc:OnAborting xsi:type="rtcDoc:action_status_doc" rtc:implemented="false"/>
+        <rtc:OnError xsi:type="rtcDoc:action_status_doc" rtc:implemented="false"/>
+        <rtc:OnReset xsi:type="rtcDoc:action_status_doc" rtc:implemented="false"/>
+        <rtc:OnExecute xsi:type="rtcDoc:action_status_doc" rtc:implemented="true"/>
+        <rtc:OnStateUpdate xsi:type="rtcDoc:action_status_doc" rtc:implemented="false"/>
+        <rtc:OnRateChanged xsi:type="rtcDoc:action_status_doc" rtc:implemented="false"/>
+        <rtc:OnAction xsi:type="rtcDoc:action_status_doc" rtc:implemented="false"/>
+        <rtc:OnModeChanged xsi:type="rtcDoc:action_status_doc" rtc:implemented="false"/>
+    </rtc:Actions>
+    <rtc:ConfigurationSet>
+        <rtc:Configuration xsi:type="rtcExt:configuration_ext" rtcExt:variableName="debug" rtc:unit="" rtc:defaultValue="0" rtc:type="int" rtc:name="debug">
+            <rtcExt:Properties rtcExt:value="text" rtcExt:name="__widget__"/>
+        </rtc:Configuration>
+        <rtc:Configuration xsi:type="rtcExt:configuration_ext" rtcExt:variableName="robotPort" rtc:unit="" rtc:defaultValue="COM1" rtc:type="string" rtc:name="robotPort">
+            <rtcDoc:Doc rtcDoc:constraint="" rtcDoc:range="" rtcDoc:unit="" rtcDoc:description="Serial Port of Robot." rtcDoc:defaultValue="" rtcDoc:dataname="robotPort"/>
+            <rtcExt:Properties rtcExt:value="text" rtcExt:name="__widget__"/>
+        </rtc:Configuration>
+        <rtc:Configuration xsi:type="rtcExt:configuration_ext" rtcExt:variableName="robotPortType" rtc:unit="" rtc:defaultValue="serial" rtc:type="string" rtc:name="robotPortType">
+            <rtcDoc:Doc rtcDoc:constraint="" rtcDoc:range="" rtcDoc:unit="" rtcDoc:description="Type of Robot Connection. tcp or serial is available" rtcDoc:defaultValue="" rtcDoc:dataname="robotPortType"/>
+            <rtcExt:Properties rtcExt:value="spin.serial,tcp" rtcExt:name="__widget__"/>
+        </rtc:Configuration>
+        <rtc:Configuration xsi:type="rtcExt:configuration_ext" rtcExt:variableName="robotTcpPort" rtc:unit="" rtc:defaultValue="8101" rtc:type="string" rtc:name="robotTcpPort">
+            <rtcDoc:Doc rtcDoc:constraint="" rtcDoc:range="" rtcDoc:unit="" rtcDoc:description="TCP Port number of Robot Connection. If robotPortType is tcp, this value will be used." rtcDoc:defaultValue="" rtcDoc:dataname="robotTcpPort"/>
+            <rtcExt:Properties rtcExt:value="text" rtcExt:name="__widget__"/>
+        </rtc:Configuration>
+        <rtc:Configuration xsi:type="rtcExt:configuration_ext" rtcExt:variableName="robotTcpAddress" rtc:unit="" rtc:defaultValue="localhost" rtc:type="string" rtc:name="robotTcpAddress">
+            <rtcDoc:Doc rtcDoc:constraint="" rtcDoc:range="" rtcDoc:unit="" rtcDoc:description="Tcp address of robot to be connected. If robotPortType is tcp, this will be used." rtcDoc:defaultValue="" rtcDoc:dataname="robotTcpAddress"/>
+            <rtcExt:Properties rtcExt:value="text" rtcExt:name="__widget__"/>
+        </rtc:Configuration>
+        <rtc:Configuration xsi:type="rtcExt:configuration_ext" rtcExt:variableName="laserPort" rtc:unit="" rtc:defaultValue="COM2" rtc:type="string" rtc:name="laserPort">
+            <rtcDoc:Doc rtcDoc:constraint="" rtcDoc:range="" rtcDoc:unit="" rtcDoc:description="Serial port number of laser sensor. If laserPortType is serial, this will be used." rtcDoc:defaultValue="" rtcDoc:dataname="laserPort"/>
+            <rtcExt:Properties rtcExt:value="text" rtcExt:name="__widget__"/>
+        </rtc:Configuration>
+        <rtc:Configuration xsi:type="rtcExt:configuration_ext" rtcExt:variableName="laserPortType" rtc:unit="" rtc:defaultValue="serial" rtc:type="string" rtc:name="laserPortType">
+            <rtcDoc:Doc rtcDoc:constraint="" rtcDoc:range="" rtcDoc:unit="" rtcDoc:description="Connection type of laser sensor. tcp or serial is available." rtcDoc:defaultValue="" rtcDoc:dataname="laserPortType"/>
+            <rtcExt:Properties rtcExt:value="spin.tcp,serial" rtcExt:name="__widget__"/>
+        </rtc:Configuration>
+        <rtc:Configuration xsi:type="rtcExt:configuration_ext" rtcExt:variableName="laserType" rtc:unit="" rtc:defaultValue="none" rtc:type="string" rtc:name="laserType">
+            <rtcDoc:Doc rtcDoc:constraint="" rtcDoc:range="" rtcDoc:unit="" rtcDoc:description="Laser sensor type. Available value is none (for no sensor), urg2.0 (Hokuyo URG 04LX SCIP2.0 protocol), lms2xx (SICK LMS200 series), lms1xx (SICK LMS100 series)." rtcDoc:defaultValue="" rtcDoc:dataname="laserType"/>
+            <rtcExt:Properties rtcExt:value="spin.none,urg2.0,lms2xx,lms1xx" rtcExt:name="__widget__"/>
+        </rtc:Configuration>
+        <rtc:Configuration xsi:type="rtcExt:configuration_ext" rtcExt:variableName="laserTcpPort" rtc:unit="" rtc:defaultValue="8102" rtc:type="string" rtc:name="laserTcpPort">
+            <rtcDoc:Doc rtcDoc:constraint="" rtcDoc:range="" rtcDoc:unit="" rtcDoc:description="If laserPortType is tcp, robot and laser is remotely connected. This value defines the tcp port of remote laser." rtcDoc:defaultValue="" rtcDoc:dataname="laserTcpPort"/>
+            <rtcExt:Properties rtcExt:value="text" rtcExt:name="__widget__"/>
+        </rtc:Configuration>
+        <rtc:Configuration xsi:type="rtcExt:configuration_ext" rtcExt:variableName="bumperSendingPolicy" rtc:unit="" rtc:defaultValue="event" rtc:type="string" rtc:name="bumperSendingPolicy">
+            <rtcDoc:Doc rtcDoc:constraint="" rtcDoc:range="" rtcDoc:unit="" rtcDoc:description="Bumper data send policy. If event, the data is sent when the bumper state is changed. If continuous, every on_execute time the data is sent." rtcDoc:defaultValue="" rtcDoc:dataname="bumperSendingPolicy"/>
+            <rtcExt:Properties rtcExt:value="spin.event,continuous" rtcExt:name="__widget__"/>
+        </rtc:Configuration>
+        <rtc:Configuration xsi:type="rtcExt:configuration_ext" rtcExt:variableName="commandTimeout" rtc:unit="" rtc:defaultValue="3" rtc:type="int" rtc:name="commandTimeout">
+            <rtcDoc:Doc rtcDoc:constraint="" rtcDoc:range="" rtcDoc:unit="" rtcDoc:description="The interval of timeout. If the targetVelocity is not sent for this interval, the robot rtc will go to error state and stop maneuvour." rtcDoc:defaultValue="" rtcDoc:dataname="commandTimeout"/>
+            <rtcExt:Properties rtcExt:value="text" rtcExt:name="__widget__"/>
+        </rtc:Configuration>
+    </rtc:ConfigurationSet>
+    <rtc:DataPorts xsi:type="rtcExt:dataport_ext" rtcExt:position="LEFT" rtcExt:variableName="targetVelocity" rtc:unit="" rtc:subscriptionType="" rtc:dataflowType="" rtc:interfaceType="" rtc:idlFile="" rtc:type="RTC::TimedVelocity2D" rtc:name="targetVelocity" rtc:portType="DataInPort">
+        <rtcDoc:Doc rtcDoc:operation="" rtcDoc:occerrence="" rtcDoc:unit="meter / sec, radian / sec" rtcDoc:semantics="" rtcDoc:number="" rtcDoc:type="" rtcDoc:description="Target Velocity of Mobile Robot (vx, vy, vz) in robot coordinate"/>
+    </rtc:DataPorts>
+    <rtc:DataPorts xsi:type="rtcExt:dataport_ext" rtcExt:position="LEFT" rtcExt:variableName="poseUpdate" rtc:unit="" rtc:subscriptionType="" rtc:dataflowType="" rtc:interfaceType="" rtc:idlFile="" rtc:type="RTC::TimedPose2D" rtc:name="poseUpdate" rtc:portType="DataInPort">
+        <rtcDoc:Doc rtcDoc:operation="" rtcDoc:occerrence="" rtcDoc:unit="meter, radian" rtcDoc:semantics="" rtcDoc:number="" rtcDoc:type="" rtcDoc:description="If you want to update the internal value of current pose of mobile robot (in global coordinates), put data to this port."/>
+    </rtc:DataPorts>
+    <rtc:DataPorts xsi:type="rtcExt:dataport_ext" rtcExt:position="RIGHT" rtcExt:variableName="currentVelocity" rtc:unit="" rtc:subscriptionType="" rtc:dataflowType="" rtc:interfaceType="" rtc:idlFile="" rtc:type="RTC::TimedVelocity2D" rtc:name="currentVelocity" rtc:portType="DataOutPort">
+        <rtcDoc:Doc rtcDoc:operation="" rtcDoc:occerrence="" rtcDoc:unit="" rtcDoc:semantics="" rtcDoc:number="" rtcDoc:type="" rtcDoc:description="Current Velocity of Mobile Robot (In robot coordinate)"/>
+    </rtc:DataPorts>
+    <rtc:DataPorts xsi:type="rtcExt:dataport_ext" rtcExt:position="RIGHT" rtcExt:variableName="currentPose" rtc:unit="" rtc:subscriptionType="" rtc:dataflowType="" rtc:interfaceType="" rtc:idlFile="" rtc:type="RTC::TimedPose2D" rtc:name="currentPose" rtc:portType="DataOutPort">
+        <rtcDoc:Doc rtcDoc:operation="" rtcDoc:occerrence="" rtcDoc:unit="meter, radian" rtcDoc:semantics="" rtcDoc:number="" rtcDoc:type="" rtcDoc:description="Current Pose estimated with Robot (usually odometry) in global coordinates."/>
+    </rtc:DataPorts>
+    <rtc:DataPorts xsi:type="rtcExt:dataport_ext" rtcExt:position="RIGHT" rtcExt:variableName="range" rtc:unit="" rtc:subscriptionType="" rtc:dataflowType="" rtc:interfaceType="" rtc:idlFile="" rtc:type="RTC::RangeData" rtc:name="range" rtc:portType="DataOutPort">
+        <rtcDoc:Doc rtcDoc:operation="" rtcDoc:occerrence="" rtcDoc:unit="" rtcDoc:semantics="" rtcDoc:number="" rtcDoc:type="" rtcDoc:description="Ranger Sensor if robot is implemented"/>
+    </rtc:DataPorts>
+    <rtc:DataPorts xsi:type="rtcExt:dataport_ext" rtcExt:position="RIGHT" rtcExt:variableName="bumper" rtc:unit="" rtc:subscriptionType="" rtc:dataflowType="" rtc:interfaceType="" rtc:idlFile="" rtc:type="RTC::TimedBooleanSeq" rtc:name="bumper" rtc:portType="DataOutPort">
+        <rtcDoc:Doc rtcDoc:operation="" rtcDoc:occerrence="" rtcDoc:unit="" rtcDoc:semantics="" rtcDoc:number="" rtcDoc:type="" rtcDoc:description="Bump Sensors if implemented. The order of sensor is same as the robot itself. Check the order with demo.exe program. If true, collide. If false, not collide. With the configuration bump policy will change the data sending policy. Please see it. "/>
+    </rtc:DataPorts>
+</rtc:RtcProfile>

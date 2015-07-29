@@ -1,0 +1,156 @@
+AriaRTCName - English
+========================
+
+.. toctree::
+   :hidden:
+
+   index_j
+
+
+Introduction
+============
+
+
+For a full list of classes and functions, see the `API documentation`_.
+
+.. _`API Documentation`:
+   doxygen/html/index.html
+
+Requirements
+============
+
+AriaRTC uses the `CMake build system`. You will need at least version
+2.8 to be able to build the component.
+
+.. _`CMAke build system`:
+   http://www.cmake.org
+
+
+Installation
+============
+
+Binary
+------
+
+Users of Windows can install the component using the binary installer. This
+will install the component and all its necessary dependencies. It is the
+recommended method of installation in Windows.
+
+- Download the installer from the website.
+- Double-click the executable file to begin installation.
+- Follow the instructions to install the component.
+- You may need to restart your computer for environment variable changes
+  to take effect before using the component.
+
+The component can be launched by double-clicking the
+``AriaRTCComp`` executable. The ``AriaRTC`` library
+is available for loading into a manager, using the initialisation function
+``AriaRTCInit``.
+
+From source
+-----------
+
+Follow these steps to install AriaRTC from source in any operating
+system:
+
+- Download the source, either from the repository or a source archive,
+  and extract it somewhere::
+
+    tar -xvzf AriaRTC-1.0.0.tar.gz
+
+- Change to the directory containing the extracted source::
+
+    cd AriaRTC-1.0.0
+
+- Create a directory called ``build``::
+
+    mkdir build
+
+- Change to that directory::
+
+    cd build
+
+- Run cmake or cmake-gui::
+
+    cmake ../
+
+- If no errors occurred, run make::
+
+    make
+
+- Finally, install the component. Ensure the necessary permissions to
+  install into the chosen prefix are available::
+
+    make install
+
+- The install destination can be changed by executing ccmake and changing
+  the variable ``CMAKE_INSTALL_PREFIX``::
+
+    ccmake ../
+
+The component is now ready for use. See the next section for instructions on
+configuring the component.
+
+AriaRTC can be launched in stand-alone mode by executing the
+``AriaRTCComp`` executable (installed into ``${prefix}/components/bin``).
+Alternatively, ``libAriaRTC.so`` can be loaded into a manager, using the
+initialisation function ``AriaRTCInit``. This shared object can be found in
+``${prefix}/components/lib`` or ``${prefix}/components/lib64``.
+
+
+Configuration
+=============
+
+The available configuration parameters are described below:
+
+================ ================== ================ ======
+Parameter        Data type          Default Value    Effect
+================ ================== ================ ======
+debug            int                0                
+robotPort        string             COM1             Serial Port of Robot.
+robotPortType    string             serial           Type of Robot Connection. tcp or serial is available
+robotTcpPort     string             8101             TCP Port number of Robot Connection. If robotPortType is tcp, this value will be used.
+robotTcpAddress  string             localhost        Tcp address of robot to be connected. If robotPortType is tcp, this will be used.
+laserPort        string             COM2             Serial port number of laser sensor. If laserPortType is serial, this will be used.
+laserPortType    string             serial           Connection type of laser sensor. tcp or serial is available.
+laserType        string             none             Laser sensor type. Available value is none (for no sensor), urg2.0 (Hokuyo URG 04LX SCIP2.0 protocol), lms2xx (SICK LMS200 series), lms1xx (SICK LMS100 series).
+laserTcpPort     string             8102             If laserPortType is tcp, robot and laser is remotely connected. This value defines the tcp port of remote laser.
+bumperSendingPolicy string             event            Bumper data send policy. If event, the data is sent when the bumper state is changed. If continuous, every on_execute time the data is sent.
+commandTimeout   int                3                The interval of timeout. If the targetVelocity is not sent for this interval, the robot rtc will go to error state and stop maneuvour.
+================ ================== ================ ======
+
+Ports
+=====
+
+The ports provided by the component are described below:
+
+=============== =========== ============================== =======
+Name            Type        Data type                      Purpose
+=============== =========== ============================== =======
+targetVelocity  InPort      RTC::TimedVelocity2D           Target Velocity of Mobile Robot (vx, vy, vz) in robot coordinate
+poseUpdate      InPort      RTC::TimedPose2D               If you want to update the internal value of current pose of mobile robot (in global coordinates), put data to this port.
+currentVelocity OutPort     RTC::TimedVelocity2D           Current Velocity of Mobile Robot (In robot coordinate)
+currentPose     OutPort     RTC::TimedPose2D               Current Pose estimated with Robot (usually odometry) in global coordinates.
+range           OutPort     RTC::RangeData                 Ranger Sensor if robot is implemented
+bumper          OutPort     RTC::TimedBooleanSeq           Bump Sensors if implemented. The order of sensor is same as the robot itself. Check the order with demo.exe program. If true, collide. If false, not collide. With the configuration bump policy will change the data sending policy. Please see it. 
+=============== =========== ============================== =======
+
+Examples
+========
+
+An example configuration file is provided in the
+``${prefix}/components/share/AriaRTC/examples/conf/`` directory.
+
+Changelog
+=========
+
+
+
+License
+=======
+
+This software is developed at the National Institute of Advanced
+Industrial Science and Technology. Approval number H23PRO-????. This
+software is licensed under the Lesser General Public License. See
+COPYING.LESSER.
+
