@@ -1,4 +1,4 @@
-set(hdrs AriaRTC.h
+set(hdrs AriaRTC.h MobileRobot.h
     PARENT_SCOPE
     )
 

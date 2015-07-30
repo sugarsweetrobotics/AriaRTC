@@ -30,7 +30,7 @@
 // </rtc-template>
 
 using namespace RTC;
-
+#include "MobileRobot.h"
 /*!
  * @class AriaRTC
  * @brief Mobile Robots ARIA library avialble robot RT-component
@@ -83,7 +83,7 @@ class AriaRTC
    * 
    * 
    */
-  // virtual RTC::ReturnCode_t onFinalize();
+   virtual RTC::ReturnCode_t onFinalize();
 
   /***
    *
@@ -303,6 +303,17 @@ class AriaRTC
    * - DefaultValue: 3
    */
   int m_commandTimeout;
+  /*!
+  * This value indicates the maximum interval of odometry (currentPose)
+  * output. This RTC measures the current position of this robot, but if
+  * no difference to the previous position is seen, this robot do not 
+  * output the value. If this value is set, RTC output the position if 
+  * the output is resumed until this interval. If this value is negative,
+  * RTC do not output until the difference is seen.
+  * - Name: odometryUpdateInterval odometryUpdateInterval
+  * - DefaultValue: 0.5
+  */
+  double m_odometryUpdateInterval;
 
   // </rtc-template>
 
@@ -354,7 +365,11 @@ class AriaRTC
    * it.
    */
   OutPort<RTC::TimedBooleanSeq> m_bumperOut;
-  
+  RTC::TimedDoubleSeq m_sonar;
+  /*!
+  * Sonar Output (distance of each sensor)
+  */
+  OutPort<RTC::TimedDoubleSeq> m_sonarOut;
   // </rtc-template>
 
   // CORBA Port declaration
@@ -381,6 +396,9 @@ class AriaRTC
   
   // </rtc-template>
 
+	 RTC::TimedPose2D m_oldPose;
+	 RTC::TimedVelocity2D m_oldTargetVelocity;
+  ssr::MobileRobot* m_pMobileRobot;
 };
 
 

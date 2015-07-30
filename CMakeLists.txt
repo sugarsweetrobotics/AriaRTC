@@ -57,6 +57,9 @@ endif(${OpenRTM_FOUND})
 # Universal settings
 #enable_testing()
 
+
+list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/ext/Modules)
+
 # Subdirectories
 add_subdirectory(cmake)
 if(BUILD_DOCUMENTATION)

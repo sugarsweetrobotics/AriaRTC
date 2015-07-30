@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <rtc:RtcProfile rtc:version="0.2" rtc:id="RTC:SUGAR SWEET ROBOTICS:MobileRobot:AriaRTC:0.0.1" xmlns:rtcExt="http://www.openrtp.org/namespaces/rtc_ext" xmlns:rtcDoc="http://www.openrtp.org/namespaces/rtc_doc" xmlns:rtc="http://www.openrtp.org/namespaces/rtc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <rtc:BasicInfo xsi:type="rtcExt:basic_info_ext" rtcExt:saveProject="AriaRTC" rtc:updateDate="2015-07-29T15:23:13.928+09:00" rtc:creationDate="2015-07-29T14:57:42+09:00" rtc:version="0.0.1" rtc:vendor="SUGAR SWEET ROBOTICS" rtc:maxInstances="1" rtc:executionType="PeriodicExecutionContext" rtc:executionRate="1000.0" rtc:description="Mobile Robots ARIA library avialble robot RT-component" rtc:category="MobileRobot" rtc:componentKind="DataFlowComponent" rtc:activityType="PERIODIC" rtc:componentType="STATIC" rtc:name="AriaRTC">
+    <rtc:BasicInfo xsi:type="rtcExt:basic_info_ext" rtcExt:saveProject="AriaRTC" rtc:updateDate="2015-07-30T12:38:04.309+09:00" rtc:creationDate="2015-07-29T14:57:42+09:00" rtc:version="0.0.1" rtc:vendor="SUGAR SWEET ROBOTICS" rtc:maxInstances="1" rtc:executionType="PeriodicExecutionContext" rtc:executionRate="1000.0" rtc:description="Mobile Robots ARIA library avialble robot RT-component" rtc:category="MobileRobot" rtc:componentKind="DataFlowComponent" rtc:activityType="PERIODIC" rtc:componentType="STATIC" rtc:name="AriaRTC">
         <rtcDoc:Doc rtcDoc:reference="" rtcDoc:license="" rtcDoc:creator="" rtcDoc:algorithm="" rtcDoc:inout="" rtcDoc:description="MobileRobot ARIA library RT-component. Basically, Mobile Robot controller, but the library also available to control laser sensors."/>
         <rtcExt:VersionUpLogs></rtcExt:VersionUpLogs>
     </rtc:BasicInfo>
@@ -64,6 +64,10 @@
             <rtcDoc:Doc rtcDoc:constraint="" rtcDoc:range="" rtcDoc:unit="" rtcDoc:description="The interval of timeout. If the targetVelocity is not sent for this interval, the robot rtc will go to error state and stop maneuvour." rtcDoc:defaultValue="" rtcDoc:dataname="commandTimeout"/>
             <rtcExt:Properties rtcExt:value="text" rtcExt:name="__widget__"/>
         </rtc:Configuration>
+        <rtc:Configuration xsi:type="rtcExt:configuration_ext" rtcExt:variableName="odometryUpdateInterval" rtc:unit="sec" rtc:defaultValue="0.5" rtc:type="double" rtc:name="odometryUpdateInterval">
+            <rtcDoc:Doc rtcDoc:constraint="" rtcDoc:range="" rtcDoc:unit="" rtcDoc:description="This value indicates the maximum interval of odometry (currentPose) output. This RTC measures the current position of this robot, but if no difference to the previous position is seen, this robot do not output the value. If this value is set, RTC output the position if the output is resumed until this interval. If this value is negative, RTC do not output until the difference is seen." rtcDoc:defaultValue="" rtcDoc:dataname="odometryUpdateInterval"/>
+            <rtcExt:Properties rtcExt:value="text" rtcExt:name="__widget__"/>
+        </rtc:Configuration>
     </rtc:ConfigurationSet>
     <rtc:DataPorts xsi:type="rtcExt:dataport_ext" rtcExt:position="LEFT" rtcExt:variableName="targetVelocity" rtc:unit="" rtc:subscriptionType="" rtc:dataflowType="" rtc:interfaceType="" rtc:idlFile="" rtc:type="RTC::TimedVelocity2D" rtc:name="targetVelocity" rtc:portType="DataInPort">
         <rtcDoc:Doc rtcDoc:operation="" rtcDoc:occerrence="" rtcDoc:unit="meter / sec, radian / sec" rtcDoc:semantics="" rtcDoc:number="" rtcDoc:type="" rtcDoc:description="Target Velocity of Mobile Robot (vx, vy, vz) in robot coordinate"/>
@@ -82,6 +86,9 @@
     </rtc:DataPorts>
     <rtc:DataPorts xsi:type="rtcExt:dataport_ext" rtcExt:position="RIGHT" rtcExt:variableName="bumper" rtc:unit="" rtc:subscriptionType="" rtc:dataflowType="" rtc:interfaceType="" rtc:idlFile="" rtc:type="RTC::TimedBooleanSeq" rtc:name="bumper" rtc:portType="DataOutPort">
         <rtcDoc:Doc rtcDoc:operation="" rtcDoc:occerrence="" rtcDoc:unit="" rtcDoc:semantics="" rtcDoc:number="" rtcDoc:type="" rtcDoc:description="Bump Sensors if implemented. The order of sensor is same as the robot itself. Check the order with demo.exe program. If true, collide. If false, not collide. With the configuration bump policy will change the data sending policy. Please see it. "/>
+    </rtc:DataPorts>
+    <rtc:DataPorts xsi:type="rtcExt:dataport_ext" rtcExt:position="RIGHT" rtcExt:variableName="sonar" rtc:unit="" rtc:subscriptionType="" rtc:dataflowType="" rtc:interfaceType="" rtc:idlFile="" rtc:type="RTC::TimedDoubleSeq" rtc:name="sonar" rtc:portType="DataOutPort">
+        <rtcDoc:Doc rtcDoc:operation="" rtcDoc:occerrence="" rtcDoc:unit="meter" rtcDoc:semantics="" rtcDoc:number="" rtcDoc:type="" rtcDoc:description="Sonar Output (distance of each sensor)"/>
     </rtc:DataPorts>
     <rtc:Language xsi:type="rtcExt:language_ext" rtc:kind="C++"/>
 </rtc:RtcProfile>
