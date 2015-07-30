@@ -37,7 +37,10 @@ static const char* ariartc_spec[] =
     "conf.default.bumperSendingPolicy", "event",
 	"conf.default.commandTimeout", "3",
 	"conf.default.odometryOutputInterval", "0.5",
-    // Widget
+	"conf.default.initial_pose_x", "0.0",
+	"conf.default.initial_pose_y", "0.0",
+	"conf.default.initial_pose_z", "0.0",
+	// Widget
     "conf.__widget__.debug", "text",
     "conf.__widget__.robotPort", "text",
     "conf.__widget__.robotPortType", "spin.serial,tcp",
@@ -50,6 +53,10 @@ static const char* ariartc_spec[] =
     "conf.__widget__.bumperSendingPolicy", "spin.event,continuous",
 	"conf.__widget__.commandTimeout", "text",
 	"conf.__widget__.odometryOutputInterval", "text",
+	"conf.__widget__.initial_pose_x", "text",
+	"conf.__widget__.initial_pose_y", "text",
+	"conf.__widget__.initial_pose_z", "text",
+
     // Constraints
     ""
   };
@@ -120,6 +127,10 @@ RTC::ReturnCode_t AriaRTC::onInitialize()
   bindParameter("bumperSendingPolicy", m_bumperSendingPolicy, "event");
   bindParameter("commandTimeout", m_commandTimeout, "3");
   bindParameter("odometryUpdateInterval", m_odometryUpdateInterval, "0.5");
+  bindParameter("initial_pose_x", m_initial_pose_x, "0.0");
+  bindParameter("initial_pose_y", m_initial_pose_y, "0.0");
+  bindParameter("initial_pose_z", m_initial_pose_z, "0.0");
+
   // </rtc-template>
   
 
@@ -152,6 +163,7 @@ RTC::ReturnCode_t AriaRTC::onShutdown(RTC::UniqueId ec_id)
 RTC::ReturnCode_t AriaRTC::onActivated(RTC::UniqueId ec_id)
 {
 	try {
+		// Robotに渡す引数の準備
 		ssr::RobotArgumentPtr pRobotArgument;
 		if (this->m_robotPortType == "serial") {
 			pRobotArgument = ssr::robotSerialConnection(m_robotPort);
@@ -159,16 +171,22 @@ RTC::ReturnCode_t AriaRTC::onActivated(RTC::UniqueId ec_id)
 		else if (this->m_robotPortType == "tcp") {
 			pRobotArgument = ssr::robotTcpConnection(m_robotTcpAddress, m_robotTcpPort);
 		}
-
+		// Laserには未対応
 		ssr::LaserArgumentPtr pLaserArgument;
 
+		// MobileRobotクラスを構築．ここでMobileRobotExceptionが投げられたらError
 		m_pMobileRobot = new ssr::MobileRobot(pRobotArgument, pLaserArgument);
 
+		// 初期位置を設定する
+		m_pMobileRobot->updateCurrentPosition(m_initial_pose_x, m_initial_pose_y, m_initial_pose_z);
+
+		// 初期位置を送信する
 		m_pMobileRobot->getCurrentPosition(&(m_currentPose.data.position.x), &(m_currentPose.data.position.y), &(m_currentPose.data.heading));
 		setTimestamp<RTC::TimedPose2D>(m_currentPose);
 		m_currentPoseOut.write();
 		m_oldPose = m_currentPose;
 
+		// 速度指令バッファのタイムスタンプをキャンセルしておく．
 		m_oldTargetVelocity.tm.sec = 0;
 		m_oldTargetVelocity.tm.nsec = 0;
 
@@ -218,7 +236,7 @@ static double operator-(const RTC::Time& t1, const RTC::Time& t2) {
 RTC::ReturnCode_t AriaRTC::onExecute(RTC::UniqueId ec_id)
 {
 	if (m_pMobileRobot->isConnectionLost()) {
-		// ロボットが切断されたらERROR状態になる．周期処理は停止
+		// ロボットとの接続切断されたらERRORになる
 		return RTC::RTC_ERROR;
 	}
 
@@ -231,15 +249,13 @@ RTC::ReturnCode_t AriaRTC::onExecute(RTC::UniqueId ec_id)
 			m_poseUpdate.data.heading);
 	}
 
-	// 現在のオドメトリ（速度・位置）を送る
-	// まずロボットからオドメトリ情報を取得する
+	// 現在の速度・位置を送る部分
 	m_pMobileRobot->getCurrentVelocity(&(m_currentVelocity.data.vx), &(m_currentVelocity.data.vy), &(m_currentVelocity.data.va));
 	m_pMobileRobot->getCurrentPosition(&(m_currentPose.data.position.x), &(m_currentPose.data.position.y), &(m_currentPose.data.heading));
 
 	setTimestamp(m_currentVelocity);
 	setTimestamp(m_currentPose);
-	//double dt = (m_currentPose.tm.sec + m_currentPose.tm.nsec / 1000000000.0) - (m_oldPose.tm.sec + m_oldPose.tm.nsec / 1000000000.0);
-
+	
 	// 前回の位置と変更があった場合は送信する．
 	if (m_oldPose.data.position.x != m_currentPose.data.position.x ||
 		m_oldPose.data.position.y != m_currentPose.data.position.y ||
@@ -248,7 +264,6 @@ RTC::ReturnCode_t AriaRTC::onExecute(RTC::UniqueId ec_id)
 		m_currentVelocityOut.write();
 		m_currentPoseOut.write();
 		m_oldPose = m_currentPose; // 前回の位置を保存
-		//m_OdometrySentTime = currentTime;
 	}
 	else {
 		// 位置に変更がなくても，時間が経過していれば送信する．
@@ -269,14 +284,19 @@ RTC::ReturnCode_t AriaRTC::onExecute(RTC::UniqueId ec_id)
 	}
 	else {
 		// 速度指令が来なかった場合は，最後の速度指令値からの時間を見て，インターバルより長ければロボットを停止させる．
+
+		// 注意！：速度指令が一度も来ていない場合はこのまま何もしない．
+		// ロボットの自己位置情報やバンパー情報などは送信しつつ，指令がなくてもエラーにはならないようにしておく．
 		if (m_oldTargetVelocity.tm.sec == 0 && m_oldTargetVelocity.tm.nsec == 0) {
 
 		}
-		double duration = m_targetVelocity.tm - m_oldTargetVelocity.tm;
-		if (duration > m_commandTimeout && m_commandTimeout > 0) {
-			std::cout << "[RTC::AriaRTC] WARNING : No target Velocity is received for " << m_commandTimeout << " seconds." << std::endl;
-			m_pMobileRobot->setTargetVelocity(0, 0, 0);
-			return RTC::RTC_ERROR;
+		else {
+			double duration = m_targetVelocity.tm - m_oldTargetVelocity.tm;
+			if (duration > m_commandTimeout && m_commandTimeout > 0) {
+				std::cout << "[RTC::AriaRTC] WARNING : No target Velocity is received for " << m_commandTimeout << " seconds." << std::endl;
+				m_pMobileRobot->setTargetVelocity(0, 0, 0);
+				return RTC::RTC_ERROR;
+			}
 		}
 	}
 
@@ -297,10 +317,11 @@ RTC::ReturnCode_t AriaRTC::onExecute(RTC::UniqueId ec_id)
 		}
 	}
 
+	// バンパー情報の送信ポリシーがcontinuousならデータは送信
 	if (this->m_bumperSendingPolicy == "continuous") {
 		setTimestamp(m_bumper);
 		m_bumperOut.write();
-	}
+	} // 送信ポリシーがeventなら状態に変化があった場合だけパケットを送信する．
 	else if (this->m_bumperSendingPolicy == "event" && updateFlag) {
 		setTimestamp(m_bumper);
 		m_bumperOut.write();

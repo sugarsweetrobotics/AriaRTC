@@ -314,7 +314,24 @@ class AriaRTC
   * - DefaultValue: 0.5
   */
   double m_odometryUpdateInterval;
-
+  /*!
+  * Initial Pose (z)
+  * - Name: initial_poes_x initial_pose_x
+  * - DefaultValue: 0.0
+  */
+  double m_initial_pose_x;
+  /*!
+  * Initial Pose (z)
+  * - Name: initial_poes_y initial_pose_y
+  * - DefaultValue: 0.0
+  */
+  double m_initial_pose_y;
+  /*!
+  * Initial Pose (z)
+  * - Name: initial_poes_z initial_pose_z
+  * - DefaultValue: 0.0
+  */
+  double m_initial_pose_z;
   // </rtc-template>
 
   // DataInPort declaration
