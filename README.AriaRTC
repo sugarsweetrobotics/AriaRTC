@@ -10,8 +10,8 @@
 #   --module-desc='Mobile Robots ARIA library avialble robot RT-component' --module-version=0.0.1 --module-vendor=SUGAR SWEET ROBOTICS 
 #   --module-category=MobileRobot --module-comp-type=STATIC 
 #   --module-act-type=PERIODIC --module-max-inst=1 
-#   --config=debug:int:0 --config=robotPort:string:COM1 --config=robotPortType:string:serial --config=robotTcpPort:string:8101 --config=robotTcpAddress:string:localhost --config=laserPort:string:COM2 --config=laserPortType:string:serial --config=laserType:string:none --config=laserTcpPort:string:8102 --config=bumperSendingPolicy:string:event --config=commandTimeout:int:3 
-#   --inport=targetVelocity:RTC::TimedVelocity2D --inport=poseUpdate:RTC::TimedPose2D --outport=currentVelocity:RTC::TimedVelocity2D --outport=currentPose:RTC::TimedPose2D --outport=range:RTC::RangeData --outport=bumper:RTC::TimedBooleanSeq 
+#   --config=debug:int:0 --config=robotPort:string:COM1 --config=robotPortType:string:serial --config=robotTcpPort:string:8101 --config=robotTcpAddress:string:localhost --config=laserPort:string:COM2 --config=laserPortType:string:serial --config=laserType:string:none --config=laserTcpPort:string:8102 --config=bumperSendingPolicy:string:event --config=commandTimeout:int:3 --config=odometryUpdateInterval:double:0.5 --config=initial_pose_x:double:0.0 --config=initial_pose_y:double:0.0 --config=initial_pose_z:double:0.0 
+#   --inport=targetVelocity:RTC::TimedVelocity2D --inport=poseUpdate:RTC::TimedPose2D --outport=currentVelocity:RTC::TimedVelocity2D --outport=currentPose:RTC::TimedPose2D --outport=range:RTC::RangeData --outport=bumper:RTC::TimedBooleanSeq --outport=sonar:RTC::TimedDoubleSeq 
 
 
 ======================================================================
@@ -194,6 +194,24 @@ Overview:    MobileRobot ARIA library RT-component. Basically,
 		RangeHigh:
 		DefaultValue:
 
+	Name:        sonar
+	PortNumber:  4
+	Description: Sonar Output (distance of each sensor)
+	PortType: 
+	DataType:    RTC::TimedDoubleSeq
+	MaxOut: 
+	[Data Elements]
+		Name:
+		Type:            
+		Number:          
+		Semantics:       
+		Unit:            meter
+		Frequency:       
+		Operation Cycle: 
+		RangeLow:
+		RangeHigh:
+		DefaultValue:
+
 
 # </rtc-template>
 
@@ -310,6 +328,47 @@ Overview:    MobileRobot ARIA library RT-component. Basically,
 		                 state and stop maneuvour.
 		Type:            int
 		DefaultValue:     3
+		Unit:            
+		Range:           
+		Constraint:      
+
+		Name:            odometryUpdateInterval odometryUpdateInterval
+		Description:     This value indicates the maximum interval of
+		                 odometry (currentPose) output. This RTC
+		                 measures the current position of this robot,
+		                 but if no difference to the previous
+		                 position is seen, this robot do not output
+		                 the value. If this value is set, RTC output
+		                 the position if the output is resumed until
+		                 this interval. If this value is negative,
+		                 RTC do not output until the difference is
+		                 seen.
+		Type:            double
+		DefaultValue:     0.5
+		Unit:            
+		Range:           
+		Constraint:      
+
+		Name:            initial_pose_x initial_pose_x
+		Description:     Initial Pose (x)
+		Type:            double
+		DefaultValue:     0.0
+		Unit:            
+		Range:           
+		Constraint:      
+
+		Name:            initial_pose_y initial_pose_y
+		Description:     Initial Pose (y)
+		Type:            double
+		DefaultValue:     0.0
+		Unit:            
+		Range:           
+		Constraint:      
+
+		Name:            initial_pose_z initial_pose_z
+		Description:     Initial Pose (z)
+		Type:            double
+		DefaultValue:     0.0
 		Unit:            
 		Range:           
 		Constraint:      
