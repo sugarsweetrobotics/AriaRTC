@@ -322,9 +322,11 @@ RTC::ReturnCode_t AriaRTC::onExecute(RTC::UniqueId ec_id)
 		setTimestamp(m_bumper);
 		m_bumperOut.write();
 	} // 送信ポリシーがeventなら状態に変化があった場合だけパケットを送信する．
-	else if (this->m_bumperSendingPolicy == "event" && updateFlag) {
-		setTimestamp(m_bumper);
-		m_bumperOut.write();
+	else if (this->m_bumperSendingPolicy == "event") {
+		if (updateFlag) {
+			setTimestamp(m_bumper);
+			m_bumperOut.write();
+		}
 	}
 	else {
 		std::cout << "[AriaRTC] Invalid Configuration BumperSendingPolicy" << std::endl;

@@ -246,12 +246,12 @@ std::shared_ptr<ArArgumentParser> MobileRobot::initArgument(RobotArgumentPtr pRo
 	}
 
 
-	ArArgumentBuilder builder;
+	static ArArgumentBuilder builder;
 	for (int i = 0; i < arguments.size(); i++) {
 		builder.add(arguments[i].c_str());
 	}
 	parser = new ArArgumentParser(&builder);
-	parser->loadDefaultArguments();
+	//parser->loadDefaultArguments();
 	return std::shared_ptr<ArArgumentParser>(parser);
 }
 
