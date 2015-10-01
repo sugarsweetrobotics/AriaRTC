@@ -92,12 +92,14 @@ namespace ssr {
 	public:
 		void setTargetVelocity(double t, double l, double r);
 		void setTargetAccel(double t, double l, double r);
+		void setTargetDecel(double t, double l, double r);
 		void setMaxVelocity(double t, double l, double r);
 		void setMaxAccel(double t, double l, double r);
+
 		void getCurrentVelocity(double *t, double *l, double *r);
 		void getCurrentAccel(double* t, double* l, double* r);
 		void getBatteryVoltage(double *v);
-
+		void setGain(int transkp, int transkv, int transki, int rotkp, int rotkv, int rotki);
 		int  getBumper(int *bump, int numBump);
 		void getTemperature(double *t);
 		void getCurrentPosition(double *x, double *y, double *th);

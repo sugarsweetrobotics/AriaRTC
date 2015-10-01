@@ -332,6 +332,27 @@ class AriaRTC
   * - DefaultValue: 0.0
   */
   double m_initial_pose_z;
+
+  double m_transacc;
+  double m_transdecel;
+  double m_rotacc;
+  double m_rotdecel;
+  double m_rotvelmax;
+  double m_transvelmax;
+
+  std::string m_update_gain;
+  int m_gain_rotkp;
+  int m_gain_rotkv;
+  int m_gain_rotki;
+  int m_gain_transkp;
+  int m_gain_transkv;
+  int m_gain_transki;
+
+
+  std::string m_update_flash;
+  int m_flash_driftfactor;
+  int m_flash_ticksmm;
+  int m_flash_revcount;
   // </rtc-template>
 
   // DataInPort declaration

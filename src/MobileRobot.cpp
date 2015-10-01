@@ -112,20 +112,25 @@ void MobileRobot::setTargetVelocity(double t, double l, double r){
 
 void MobileRobot::setTargetAccel(double t, double l, double r){
 	m_pRobot->setTransAccel(t);
-	m_pRobot->setTransDecel(t);
 	m_pRobot->setRotAccel(r);
-	m_pRobot->setRotDecel(r);
 	if (m_pRobot->hasLatVel()) {
 		m_pRobot->setLatAccel(l);
-		m_pRobot->setLatDecel(l);
+	}
+}
+
+void MobileRobot::setTargetDecel(double t, double l, double r){
+	m_pRobot->setTransDecel(t*1000);
+	m_pRobot->setRotDecel(r * 180 / M_PI);
+	if (m_pRobot->hasLatVel()) {
+		m_pRobot->setLatDecel(l * 1000);
 	}
 }
 
 void MobileRobot::setMaxVelocity(double t, double l, double r){
-	m_pRobot->setTransVelMax(t);
-	m_pRobot->setRotVelMax(r);
+	m_pRobot->setTransVelMax(t * 1000);
+	m_pRobot->setRotVelMax(r * 180 / M_PI);
 	if (m_pRobot->hasLatVel()) {
-		m_pRobot->setLatVelMax(l);
+		m_pRobot->setLatVelMax(l * 1000);
 	}
 }
 
@@ -139,6 +144,17 @@ void MobileRobot::setMaxAccel(double t, double l, double r){
 		m_pRobot->setLatDecel(l);
 	}
 }
+
+void MobileRobot::setGain(int transkp, int transkv, int transki, int rotkp, int rotkv, int rotki)
+{
+	m_pRobot->comInt(82, rotkp);
+	m_pRobot->comInt(83, rotkv);
+	m_pRobot->comInt(84, rotki);
+	m_pRobot->comInt(85, transkp);
+	m_pRobot->comInt(86, transkv);
+	m_pRobot->comInt(87, transki);
+}
+
 
 void MobileRobot::getCurrentVelocity(double *t, double *l, double *r){
 	*t = m_pRobot->getVel() / 1000.0;

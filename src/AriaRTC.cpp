@@ -40,6 +40,20 @@ static const char* ariartc_spec[] =
 	"conf.default.initial_pose_x", "0.0",
 	"conf.default.initial_pose_y", "0.0",
 	"conf.default.initial_pose_z", "0.0",
+	"conf.default.transacc", "0.3",
+	"conf.default.transdecel", "0.3",
+	"conf.default.rotacc", "1.75",
+	"conf.default.rotdecel", "1.75",
+	"conf.default.transvelmax", "0.75",
+	"conf.default.rotvelmax", "1.75",
+	"conf.default.update_gain", "false",
+	"conf.default.gain_rotkp", "40",
+	"conf.default.gain_rotkv", "20",
+	"conf.default.gain_rotki", "0",
+	"conf.default.gain_transkp", "40",
+	"conf.default.gain_transkv", "30",
+	"conf.default.gain_transki", "0",
+
 	// Widget
     "conf.__widget__.debug", "text",
     "conf.__widget__.robotPort", "text",
@@ -130,6 +144,28 @@ RTC::ReturnCode_t AriaRTC::onInitialize()
   bindParameter("initial_pose_x", m_initial_pose_x, "0.0");
   bindParameter("initial_pose_y", m_initial_pose_y, "0.0");
   bindParameter("initial_pose_z", m_initial_pose_z, "0.0");
+  bindParameter("transvelmax", m_transvelmax, "0.75");
+  bindParameter("rotvelmax", m_rotvelmax, "1.75");
+  bindParameter("rotacc", m_rotacc, "1.75");
+  bindParameter("rotdecel", m_rotdecel, "1.75");
+  bindParameter("transacc", m_transacc, "0.3");
+  bindParameter("transdecel", m_transdecel, "0.3");
+
+  bindParameter("update_gain", m_update_gain, "false");
+  bindParameter("gain_rotkp", m_gain_rotkp, "40");
+  bindParameter("gain_rotkv", m_gain_rotkv, "20");
+  bindParameter("gain_rotki", m_gain_rotki, "0");
+  bindParameter("gain_transkp", m_gain_transkp, "40");
+  bindParameter("gain_transkv", m_gain_transkv, "30");
+  bindParameter("gain_transki", m_gain_transki, "0");
+
+  /*
+  bindParameter("update_flash", m_update_flash, "false");
+  bindParameter("flash_revcount", m_flash_revcount, "0");
+  bindParameter("flash_driftfactor", m_flash_driftfactor, "0");
+  bindParameter("flash_ticksmm", m_flash_ticksmm, "0");
+  */
+
 
   // </rtc-template>
   
@@ -180,6 +216,19 @@ RTC::ReturnCode_t AriaRTC::onActivated(RTC::UniqueId ec_id)
 		// 初期位置を設定する
 		m_pMobileRobot->updateCurrentPosition(m_initial_pose_x, m_initial_pose_y, m_initial_pose_z);
 
+		// 加速度を設定する
+		m_pMobileRobot->setTargetAccel(m_transacc, m_transacc, m_rotacc);
+		m_pMobileRobot->setTargetAccel(m_transdecel , m_transdecel, m_rotdecel);
+
+		// Set Maximum velocity
+		m_pMobileRobot->setMaxVelocity(m_transvelmax, 0, m_rotvelmax);
+
+		if (coil::toBool(m_update_gain, "true", "false", "false")) {
+			m_pMobileRobot->setGain(m_gain_transkp, m_gain_transkv, m_gain_transki,
+				m_gain_rotkp, m_gain_rotkv, m_gain_rotki);
+		}
+
+
 		// 初期位置を送信する
 		m_pMobileRobot->getCurrentPosition(&(m_currentPose.data.position.x), &(m_currentPose.data.position.y), &(m_currentPose.data.heading));
 		setTimestamp<RTC::TimedPose2D>(m_currentPose);
@@ -195,7 +244,7 @@ RTC::ReturnCode_t AriaRTC::onActivated(RTC::UniqueId ec_id)
 		int numBump = m_pMobileRobot->getBumper(bump, 10);
 		m_bumper.data.length(numBump);
 		for (int i = 0; i < numBump; i++) {
-			m_bumper.data[i] = bump[i];
+			m_bumper.data[i] = bump[i] != 0;
 		}
 		setTimestamp(m_bumper);
 		m_bumperOut.write();
@@ -345,14 +394,14 @@ RTC::ReturnCode_t AriaRTC::onExecute(RTC::UniqueId ec_id)
 	for (int i = 0; i < numSonar; i++) {
 		double distance = m_pMobileRobot->getSonarOutput(i);
 		if (m_sonar.data[i] != distance) {
-			m_bumper.data[i] = distance;
+			m_sonar.data[i] = distance;
 			updateFlag = true;
 		}
 	}
 	
 	if(updateFlag) {
-		setTimestamp(m_bumper);
-		m_bumperOut.write();
+		setTimestamp(m_sonar);
+		m_sonarOut.write();
 	}
 
 	return RTC::RTC_OK;
